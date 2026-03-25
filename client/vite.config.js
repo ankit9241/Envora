@@ -11,5 +11,17 @@ export default defineConfig({
         changeOrigin: true,
       }
     }
+  },
+  build: {
+    target: 'esnext',
+    rollupOptions: {
+      output: {
+        manualChunks: undefined,
+      }
+    },
+    assetsInlineLimit: 4096,
+  },
+  preview: {
+    port: 4173,
   }
 })
