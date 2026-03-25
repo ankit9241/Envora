@@ -5,11 +5,14 @@ import {
   Key,
   FileText,
   Settings,
-  Shield
+  Shield,
+  LogOut
 } from "lucide-react";
 import { NavLink } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 
 const Sidebar = () => {
+  const { logout } = useAuth();
   const items = [
     { name: "Dashboard", icon: LayoutDashboard, path: "/dashboard" },
     { name: "Projects", icon: Folder, path: "/projects" },
@@ -17,6 +20,10 @@ const Sidebar = () => {
     { name: "Notes", icon: FileText, path: "/notes" },
     { name: "Settings", icon: Settings, path: "/settings" },
   ];
+
+  const handleLogout = () => {
+    logout();
+  };
 
   return (
     <aside className="w-64 h-screen bg-panel border-r border-border flex flex-col p-4">
@@ -55,6 +62,16 @@ const Sidebar = () => {
         ))}
 
       </nav>
+
+      {/* Logout Button */}
+      <button
+        onClick={handleLogout}
+        className="mt-4 flex items-center gap-3 px-4 py-3 rounded-lg text-sm text-textSecondary hover:bg-[#1E293B] hover:text-white transition-colors"
+        title="Logout"
+      >
+        <LogOut size={18} />
+        <span>Logout</span>
+      </button>
 
       {/* Bottom Status */}
       <div className="mt-auto p-3 border-t border-border">

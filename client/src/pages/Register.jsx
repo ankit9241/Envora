@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { Mail, Lock, ArrowRight } from "lucide-react";
+import { GoogleLogin } from '@react-oauth/google';
 import authService from "../services/authService";
 import { useAuth } from "../context/AuthContext";
 
@@ -31,6 +32,38 @@ const Register = () => {
       navigate("/dashboard");
     } catch (err) {
       setError(err.response?.data?.msg || "Register failed");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleGoogleLogin = async (credentialResponse) => {
+    try {
+      setError("");
+      setLoading(true);
+      
+      // Send the Google ID token to your backend
+      const response = await fetch('/api/auth/google', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          token: credentialResponse.credential
+        }),
+      });
+      
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.msg || 'Google login failed');
+      }
+      
+      const data = await response.json();
+      await login(data.token);
+      navigate("/dashboard");
+    } catch (err) {
+      console.error('Google login error:', err);
+      setError(err.message || "Google login failed");
     } finally {
       setLoading(false);
     }
@@ -116,6 +149,32 @@ const Register = () => {
               )}
             </button>
           </form>
+
+          <div className="mt-6">
+            <div className="relative">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t border-border"></div>
+              </div>
+              <div className="relative flex justify-center text-sm">
+                <span className="px-2 bg-panel text-textMuted">OR CONTINUE WITH</span>
+              </div>
+            </div>
+            
+            <div className="mt-4">
+              <GoogleLogin
+                onSuccess={handleGoogleLogin}
+                onError={() => setError("Google login failed")}
+                useOneTap
+                disabled={loading}
+                type="standard"
+                shape="rectangular"
+                theme="filled_black"
+                text="signin_with"
+                size="large"
+                width="100%"
+              />
+            </div>
+          </div>
 
           <div className="mt-6 text-center text-sm text-textMuted">
             Already have an account?{" "}

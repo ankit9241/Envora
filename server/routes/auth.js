@@ -5,6 +5,7 @@ const authMiddleware = require('../middleware/auth');
 
 router.post('/register', authController.register);
 router.post('/login', authController.login);
+router.post('/google', authController.googleAuth);
 router.get('/me', authMiddleware, authController.getMe);
 router.delete('/delete', authMiddleware, authController.deleteUser);
 

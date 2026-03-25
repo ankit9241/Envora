@@ -10,7 +10,20 @@ const userSchema = new mongoose.Schema({
     },
     passwordHash: {
         type: String,
-        required: true,
+        required: function() {
+            return !this.isGoogleUser;
+        }
+    },
+    name: {
+        type: String,
+        trim: true,
+    },
+    avatar: {
+        type: String,
+    },
+    isGoogleUser: {
+        type: Boolean,
+        default: false,
     },
     createdAt: {
         type: Date,
