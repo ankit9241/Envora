@@ -15,6 +15,7 @@ app.use(
       "http://localhost:5173",
       "https://accounts.google.com",
       "http://localhost:3000",
+      "https://envora.netlify.app",
     ],
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
